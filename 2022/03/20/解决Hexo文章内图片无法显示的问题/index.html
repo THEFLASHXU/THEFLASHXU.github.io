@@ -16,25 +16,25 @@
   <meta name="author" content="玫瑰信徒">
   <meta name="keywords" content="">
   
-    <meta name="description" content="在vscode中设置用ctrl+鼠标滚轮缩放字体步骤一点击【文件】【首选项】【设置】 步骤二在上方搜索栏搜索关键字setting打开设置配置文件    步骤三在setting.json中加入一行语句： 1&quot;editor.mouseWheelZoom&quot;: true   接着就可以用ctrl+滚轮调整编辑区字体大小了">
+    <meta name="description" content="解决Hexo文章内图片无法显示的问题问题描述：按照网上的教程一步一步配置好Hexo后，发现自己使用markdown语法引入的图片无法在自己的博客页面浏览，打开F12对HTML代码进行查看的时候发现是路径问题。 方式1将_config.yml文件中的配置项post_asset_folder设为true后，执行命令$ hexo new post_name，在source&#x2F;_posts中会生成文章pos">
 <meta property="og:type" content="article">
-<meta property="og:title" content="在vscode中设置用ctrl+鼠标滚轮缩放字体">
-<meta property="og:url" content="http://example.com/2022/03/20/%E5%9C%A8vscode%E4%B8%AD%E8%AE%BE%E7%BD%AE%E7%94%A8ctrl-%E9%BC%A0%E6%A0%87%E6%BB%9A%E8%BD%AE%E7%BC%A9%E6%94%BE%E5%AD%97%E4%BD%93/index.html">
+<meta property="og:title" content="解决Hexo文章内图片无法显示的问题">
+<meta property="og:url" content="http://example.com/2022/03/20/%E8%A7%A3%E5%86%B3Hexo%E6%96%87%E7%AB%A0%E5%86%85%E5%9B%BE%E7%89%87%E6%97%A0%E6%B3%95%E6%98%BE%E7%A4%BA%E7%9A%84%E9%97%AE%E9%A2%98/index.html">
 <meta property="og:site_name" content="玫瑰信徒的博客">
-<meta property="og:description" content="在vscode中设置用ctrl+鼠标滚轮缩放字体步骤一点击【文件】【首选项】【设置】 步骤二在上方搜索栏搜索关键字setting打开设置配置文件    步骤三在setting.json中加入一行语句： 1&quot;editor.mouseWheelZoom&quot;: true   接着就可以用ctrl+滚轮调整编辑区字体大小了">
+<meta property="og:description" content="解决Hexo文章内图片无法显示的问题问题描述：按照网上的教程一步一步配置好Hexo后，发现自己使用markdown语法引入的图片无法在自己的博客页面浏览，打开F12对HTML代码进行查看的时候发现是路径问题。 方式1将_config.yml文件中的配置项post_asset_folder设为true后，执行命令$ hexo new post_name，在source&#x2F;_posts中会生成文章pos">
 <meta property="og:locale" content="zh_CN">
-<meta property="og:image" content="http://example.com/2022/03/20/%E5%9C%A8vscode%E4%B8%AD%E8%AE%BE%E7%BD%AE%E7%94%A8ctrl-%E9%BC%A0%E6%A0%87%E6%BB%9A%E8%BD%AE%E7%BC%A9%E6%94%BE%E5%AD%97%E4%BD%93/%E6%88%AA%E5%9B%BE1.png">
-<meta property="og:image" content="http://example.com/2022/03/20/%E5%9C%A8vscode%E4%B8%AD%E8%AE%BE%E7%BD%AE%E7%94%A8ctrl-%E9%BC%A0%E6%A0%87%E6%BB%9A%E8%BD%AE%E7%BC%A9%E6%94%BE%E5%AD%97%E4%BD%93/2.png">
-<meta property="article:published_time" content="2022-03-20T06:18:19.000Z">
-<meta property="article:modified_time" content="2022-03-20T11:01:45.544Z">
+<meta property="og:image" content="http://example.com/2022/03/20/%E8%A7%A3%E5%86%B3Hexo%E6%96%87%E7%AB%A0%E5%86%85%E5%9B%BE%E7%89%87%E6%97%A0%E6%B3%95%E6%98%BE%E7%A4%BA%E7%9A%84%E9%97%AE%E9%A2%98/1.png">
+<meta property="og:image" content="http://example.com/2022/03/20/%E8%A7%A3%E5%86%B3Hexo%E6%96%87%E7%AB%A0%E5%86%85%E5%9B%BE%E7%89%87%E6%97%A0%E6%B3%95%E6%98%BE%E7%A4%BA%E7%9A%84%E9%97%AE%E9%A2%98/2.png">
+<meta property="article:published_time" content="2022-03-20T10:44:54.000Z">
+<meta property="article:modified_time" content="2022-03-20T11:16:00.515Z">
 <meta property="article:author" content="玫瑰信徒">
-<meta property="article:tag" content="vscode">
-<meta property="article:tag" content="技术笔记">
+<meta property="article:tag" content="Hexo">
+<meta property="article:tag" content="技术问题">
 <meta name="twitter:card" content="summary_large_image">
-<meta name="twitter:image" content="http://example.com/2022/03/20/%E5%9C%A8vscode%E4%B8%AD%E8%AE%BE%E7%BD%AE%E7%94%A8ctrl-%E9%BC%A0%E6%A0%87%E6%BB%9A%E8%BD%AE%E7%BC%A9%E6%94%BE%E5%AD%97%E4%BD%93/%E6%88%AA%E5%9B%BE1.png">
+<meta name="twitter:image" content="http://example.com/2022/03/20/%E8%A7%A3%E5%86%B3Hexo%E6%96%87%E7%AB%A0%E5%86%85%E5%9B%BE%E7%89%87%E6%97%A0%E6%B3%95%E6%98%BE%E7%A4%BA%E7%9A%84%E9%97%AE%E9%A2%98/1.png">
   
   
-  <title>在vscode中设置用ctrl+鼠标滚轮缩放字体 - 玫瑰信徒的博客</title>
+  <title>解决Hexo文章内图片无法显示的问题 - 玫瑰信徒的博客</title>
 
   <link  rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@4/dist/css/bootstrap.min.css" />
 
@@ -180,7 +180,7 @@
       <div class="full-bg-img">
         <div class="mask flex-center" style="background-color: rgba(0, 0, 0, 0.3)">
           <div class="page-header text-center fade-in-up">
-            <span class="h2" id="subtitle" title="在vscode中设置用ctrl+鼠标滚轮缩放字体">
+            <span class="h2" id="subtitle" title="解决Hexo文章内图片无法显示的问题">
               
             </span>
 
@@ -190,8 +190,8 @@
   
     <span class="post-meta">
       <i class="iconfont icon-date-fill" aria-hidden="true"></i>
-      <time datetime="2022-03-20 14:18" pubdate>
-        2022年3月20日 下午
+      <time datetime="2022-03-20 18:44" pubdate>
+        2022年3月20日 晚上
       </time>
     </span>
   
@@ -201,7 +201,7 @@
   
     <span class="post-meta mr-2">
       <i class="iconfont icon-chart"></i>
-      157 字
+      738 字
     </span>
   
 
@@ -210,7 +210,7 @@
       <i class="iconfont icon-clock-fill"></i>
       
       
-      2 分钟
+      7 分钟
     </span>
   
 
@@ -239,19 +239,25 @@
         <div class="py-5" id="board">
           <article class="post-content mx-auto">
             <!-- SEO header -->
-            <h1 style="display: none">在vscode中设置用ctrl+鼠标滚轮缩放字体</h1>
+            <h1 style="display: none">解决Hexo文章内图片无法显示的问题</h1>
             
             <div class="markdown-body">
-              <h1 id="在vscode中设置用ctrl-鼠标滚轮缩放字体"><a href="#在vscode中设置用ctrl-鼠标滚轮缩放字体" class="headerlink" title="在vscode中设置用ctrl+鼠标滚轮缩放字体"></a>在vscode中设置用ctrl+鼠标滚轮缩放字体</h1><h2 id="步骤一"><a href="#步骤一" class="headerlink" title="步骤一"></a>步骤一</h2><p>点击【文件】【首选项】【设置】</p>
-<h2 id="步骤二"><a href="#步骤二" class="headerlink" title="步骤二"></a>步骤二</h2><p>在上方搜索栏搜索关键字setting打开设置配置文件</p>
-<img src="/2022/03/20/%E5%9C%A8vscode%E4%B8%AD%E8%AE%BE%E7%BD%AE%E7%94%A8ctrl-%E9%BC%A0%E6%A0%87%E6%BB%9A%E8%BD%AE%E7%BC%A9%E6%94%BE%E5%AD%97%E4%BD%93/%E6%88%AA%E5%9B%BE1.png" srcset="/img/loading.gif" lazyload class="" title="This is an example image">
+              <h1 id="解决Hexo文章内图片无法显示的问题"><a href="#解决Hexo文章内图片无法显示的问题" class="headerlink" title="解决Hexo文章内图片无法显示的问题"></a>解决Hexo文章内图片无法显示的问题</h1><p>问题描述：按照网上的教程一步一步配置好Hexo后，发现自己使用markdown语法引入的图片无法在自己的博客页面浏览，打开F12对HTML代码进行查看的时候发现是路径问题。</p>
+<h2 id="方式1"><a href="#方式1" class="headerlink" title="方式1"></a>方式1</h2><p>将<code>_config.yml</code>文件中的配置项<code>post_asset_folder</code>设为true后，执行命令<code>$ hexo new post_name</code>，在<code>source/_posts</code>中会生成文章<code>post_name.md</code>和同名文件夹<code>post_name</code>。将图片资源放在<code>post_name</code>中，文章就可以使用相对路径引用图片资源了。</p>
+<p><strong><img src="/2022/03/20/%E8%A7%A3%E5%86%B3Hexo%E6%96%87%E7%AB%A0%E5%86%85%E5%9B%BE%E7%89%87%E6%97%A0%E6%B3%95%E6%98%BE%E7%A4%BA%E7%9A%84%E9%97%AE%E9%A2%98/1.png" srcset="/img/loading.gif" lazyload class=""></strong></p>
+<p>将此目录结构上传到github会发现，原本不和文章.md在同一文件下的图片，在github中竟然跑到一个文件夹去了</p>
+<p><strong><img src="/2022/03/20/%E8%A7%A3%E5%86%B3Hexo%E6%96%87%E7%AB%A0%E5%86%85%E5%9B%BE%E7%89%87%E6%97%A0%E6%B3%95%E6%98%BE%E7%A4%BA%E7%9A%84%E9%97%AE%E9%A2%98/2.png" srcset="/img/loading.gif" lazyload class=""></strong></p>
+<p>这就导致我们用markdown语法引入图片的时候所写的路径和html中引用的路径不一样，若现在还尝试使用markdown语法，那需要以github仓库中的路径为准，比如将<strong>“ 图片文件夹&#x2F;1.jpg ”改为“ 1.jpg ”</strong></p>
+<p><strong>上述是markdown的引用方式，图片只能在文章中显示，但无法在首页中正常显示。</strong></p>
+<p>下面来介绍方式2</p>
+<h2 id="方式2"><a href="#方式2" class="headerlink" title="方式2"></a>方式2</h2><p>如果希望图片在文章和首页中同时显示，可以使用标签插件语法。</p>
+<p><code>&#123;% asset_img image.jpg This is an image %&#125;</code></p>
+<p>这里的image.jpg需要按需修改成和文章同名文件夹内的真正图片名称，而不是路径名称， 请注意区分。</p>
+<h2 id="方式3"><a href="#方式3" class="headerlink" title="方式3"></a>方式3</h2><p>这个方式我没有自己试过，现整理如下</p>
+<h3 id="绝对路径"><a href="#绝对路径" class="headerlink" title="绝对路径"></a>绝对路径</h3><p>当Hexo项目中只用到少量图片时，可以将图片统一放在<code>source/images</code>文件夹中，通过markdown语法访问它们。</p>
+<figure class="highlight arcade"><table><tr><td class="gutter"><div class="code-wrapper"><pre><span class="line">1</span><br></pre></div></td><td class="code"><pre><code class="hljs arcade">![](<span class="hljs-regexp">/images/im</span>age.jpg)<br></code></pre></td></tr></table></figure>
 
-
-<h2 id="步骤三"><a href="#步骤三" class="headerlink" title="步骤三"></a>步骤三</h2><p>在setting.json中加入一行语句：</p>
-<figure class="highlight json"><table><tr><td class="gutter"><div class="code-wrapper"><pre><span class="line">1</span><br></pre></div></td><td class="code"><pre><code class="hljs json"><span class="hljs-attr">&quot;editor.mouseWheelZoom&quot;</span><span class="hljs-punctuation">:</span> <span class="hljs-keyword">true</span><br></code></pre></td></tr></table></figure>
-<img src="/2022/03/20/%E5%9C%A8vscode%E4%B8%AD%E8%AE%BE%E7%BD%AE%E7%94%A8ctrl-%E9%BC%A0%E6%A0%87%E6%BB%9A%E8%BD%AE%E7%BC%A9%E6%94%BE%E5%AD%97%E4%BD%93/2.png" srcset="/img/loading.gif" lazyload class="" title="This is an example image">
-
-<p>接着就可以用ctrl+滚轮调整编辑区字体大小了</p>
+<p>图片既可以在首页内容中访问到，也可以在文章正文中访问到。</p>
 
             </div>
             <hr>
@@ -261,7 +267,7 @@
                   <div class="post-meta mr-3">
                     <i class="iconfont icon-category"></i>
                     
-                      <a class="hover-with-bg" href="/categories/%E6%8A%80%E6%9C%AF%E7%AC%94%E8%AE%B0/">技术笔记</a>
+                      <a class="hover-with-bg" href="/categories/Hexo%E7%AC%94%E8%AE%B0/">Hexo笔记</a>
                     
                   </div>
                 
@@ -269,9 +275,9 @@
                   <div class="post-meta">
                     <i class="iconfont icon-tags"></i>
                     
-                      <a class="hover-with-bg" href="/tags/vscode/">vscode</a>
+                      <a class="hover-with-bg" href="/tags/Hexo/">Hexo</a>
                     
-                      <a class="hover-with-bg" href="/tags/%E6%8A%80%E6%9C%AF%E7%AC%94%E8%AE%B0/">技术笔记</a>
+                      <a class="hover-with-bg" href="/tags/%E6%8A%80%E6%9C%AF%E9%97%AE%E9%A2%98/">技术问题</a>
                     
                   </div>
                 
@@ -288,15 +294,15 @@
                   <article class="post-prev col-6">
                     
                     
-                      <a href="/2022/03/20/%E8%A7%A3%E5%86%B3Hexo%E6%96%87%E7%AB%A0%E5%86%85%E5%9B%BE%E7%89%87%E6%97%A0%E6%B3%95%E6%98%BE%E7%A4%BA%E7%9A%84%E9%97%AE%E9%A2%98/">
-                        <i class="iconfont icon-arrowleft"></i>
-                        <span class="hidden-mobile">解决Hexo文章内图片无法显示的问题</span>
-                        <span class="visible-mobile">上一篇</span>
-                      </a>
-                    
                   </article>
                   <article class="post-next col-6">
                     
+                    
+                      <a href="/2022/03/20/%E5%9C%A8vscode%E4%B8%AD%E8%AE%BE%E7%BD%AE%E7%94%A8ctrl-%E9%BC%A0%E6%A0%87%E6%BB%9A%E8%BD%AE%E7%BC%A9%E6%94%BE%E5%AD%97%E4%BD%93/">
+                        <span class="hidden-mobile">在vscode中设置用ctrl+鼠标滚轮缩放字体</span>
+                        <span class="visible-mobile">下一篇</span>
+                        <i class="iconfont icon-arrowright"></i>
+                      </a>
                     
                   </article>
                 </div>
