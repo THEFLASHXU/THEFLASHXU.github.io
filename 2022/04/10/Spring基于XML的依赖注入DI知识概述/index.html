@@ -1,0 +1,479 @@
+
+
+<!DOCTYPE html>
+<html lang="zh-CN" data-default-color-scheme=auto>
+
+
+
+<head>
+  <meta charset="UTF-8">
+  <link rel="apple-touch-icon" sizes="76x76" href="/img/favicon.png">
+  <link rel="icon" href="/img/favicon.png">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=5.0, shrink-to-fit=no">
+  <meta http-equiv="x-ua-compatible" content="ie=edge">
+  
+  <meta name="theme-color" content="#2f4154">
+  <meta name="author" content="玫瑰信徒">
+  <meta name="keywords" content="">
+  
+    <meta name="description" content="基于XML的DIbean 实例在调用无参构造器创建对象后，就要对 bean 对象的属性进行初始化。初始化是由容器自动完成的，称为注入。根据注入方式的不同，常用的有两类：set 注入、构造注入。 一、set注入set 注入也叫设值注入,通过 setter 方法传入被调用者的实例。 1.1.简单类型简单类型：spring中规定java的基本数据类型和String都是简单类型 声明student对象：">
+<meta property="og:type" content="article">
+<meta property="og:title" content="Spring基于XML的依赖注入DI知识概述">
+<meta property="og:url" content="http://example.com/2022/04/10/Spring%E5%9F%BA%E4%BA%8EXML%E7%9A%84%E4%BE%9D%E8%B5%96%E6%B3%A8%E5%85%A5DI%E7%9F%A5%E8%AF%86%E6%A6%82%E8%BF%B0/index.html">
+<meta property="og:site_name" content="玫瑰信徒的博客">
+<meta property="og:description" content="基于XML的DIbean 实例在调用无参构造器创建对象后，就要对 bean 对象的属性进行初始化。初始化是由容器自动完成的，称为注入。根据注入方式的不同，常用的有两类：set 注入、构造注入。 一、set注入set 注入也叫设值注入,通过 setter 方法传入被调用者的实例。 1.1.简单类型简单类型：spring中规定java的基本数据类型和String都是简单类型 声明student对象：">
+<meta property="og:locale" content="zh_CN">
+<meta property="og:image" content="http://example.com/img/article_cover_img/SSM_logo.jpg">
+<meta property="article:published_time" content="2022-04-10T06:06:14.000Z">
+<meta property="article:modified_time" content="2022-04-10T08:34:25.548Z">
+<meta property="article:author" content="玫瑰信徒">
+<meta property="article:tag" content="技术笔记">
+<meta property="article:tag" content="Spring">
+<meta name="twitter:card" content="summary_large_image">
+<meta name="twitter:image" content="http://example.com/img/article_cover_img/SSM_logo.jpg">
+  
+  
+  <title>Spring基于XML的依赖注入DI知识概述 - 玫瑰信徒的博客</title>
+
+  <link  rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@4/dist/css/bootstrap.min.css" />
+
+
+  <link  rel="stylesheet" href="https://cdn.jsdelivr.net/npm/github-markdown-css@4/github-markdown.min.css" />
+  <link  rel="stylesheet" href="https://cdn.jsdelivr.net/npm/hint.css@2/hint.min.css" />
+
+  
+    
+    
+      
+      <link  rel="stylesheet" href="https://cdn.jsdelivr.net/npm/highlight.js@10/styles/github-gist.min.css" />
+    
+  
+
+  
+    <link  rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@fancyapps/fancybox@3/dist/jquery.fancybox.min.css" />
+  
+
+
+<!-- 主题依赖的图标库，不要自行修改 -->
+
+<link rel="stylesheet" href="//at.alicdn.com/t/font_1749284_ba1fz6golrf.css">
+
+
+
+<link rel="stylesheet" href="//at.alicdn.com/t/font_1736178_lbnruvf0jn.css">
+
+
+<link  rel="stylesheet" href="/css/main.css" />
+
+<!-- 自定义样式保持在最底部 -->
+
+
+  <script id="fluid-configs">
+    var Fluid = window.Fluid || {};
+    var CONFIG = {"hostname":"example.com","root":"/","version":"1.8.14","typing":{"enable":true,"typeSpeed":70,"cursorChar":"_","loop":false},"anchorjs":{"enable":true,"element":"h1,h2,h3,h4,h5,h6","placement":"right","visible":"hover","icon":""},"progressbar":{"enable":true,"height_px":3,"color":"#29d","options":{"showSpinner":false,"trickleSpeed":100}},"copy_btn":true,"image_zoom":{"enable":true,"img_url_replace":["",""]},"toc":{"enable":true,"headingSelector":"h1,h2,h3,h4,h5,h6","collapseDepth":0},"lazyload":{"enable":true,"loading_img":"/img/loading.gif","onlypost":false,"offset_factor":2},"web_analytics":{"enable":false,"baidu":null,"google":null,"gtag":null,"tencent":{"sid":null,"cid":null},"woyaola":null,"cnzz":null,"leancloud":{"app_id":null,"app_key":null,"server_url":null,"path":"window.location.pathname","ignore_local":false}},"search_path":"/local-search.xml"};
+  </script>
+  <script  src="/js/utils.js" ></script>
+  <script  src="/js/color-schema.js" ></script>
+<meta name="generator" content="Hexo 6.1.0"></head>
+
+
+<body>
+  <header style="height: 70vh;">
+    <nav id="navbar" class="navbar fixed-top  navbar-expand-lg navbar-dark scrolling-navbar">
+  <div class="container">
+    <a class="navbar-brand" href="/">
+      <strong>玫瑰信徒</strong>
+    </a>
+
+    <button id="navbar-toggler-btn" class="navbar-toggler" type="button" data-toggle="collapse"
+            data-target="#navbarSupportedContent"
+            aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+      <div class="animated-icon"><span></span><span></span><span></span></div>
+    </button>
+
+    <!-- Collapsible content -->
+    <div class="collapse navbar-collapse" id="navbarSupportedContent">
+      <ul class="navbar-nav ml-auto text-center">
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/">
+                <i class="iconfont icon-home-fill"></i>
+                首页
+              </a>
+            </li>
+          
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/archives/">
+                <i class="iconfont icon-archive-fill"></i>
+                归档
+              </a>
+            </li>
+          
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/categories/">
+                <i class="iconfont icon-category-fill"></i>
+                分类
+              </a>
+            </li>
+          
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/tags/">
+                <i class="iconfont icon-tags-fill"></i>
+                标签
+              </a>
+            </li>
+          
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/about/">
+                <i class="iconfont icon-user-fill"></i>
+                关于
+              </a>
+            </li>
+          
+        
+        
+          <li class="nav-item" id="search-btn">
+            <a class="nav-link" target="_self" href="javascript:;" data-toggle="modal" data-target="#modalSearch" aria-label="Search">
+              &nbsp;<i class="iconfont icon-search"></i>&nbsp;
+            </a>
+          </li>
+        
+        
+          <li class="nav-item" id="color-toggle-btn">
+            <a class="nav-link" target="_self" href="javascript:;" aria-label="Color Toggle">&nbsp;<i
+                class="iconfont icon-dark" id="color-toggle-icon"></i>&nbsp;</a>
+          </li>
+        
+      </ul>
+    </div>
+  </div>
+</nav>
+
+    <div class="banner" id="banner" parallax=true
+         style="background: url('/img/default.png') no-repeat center center;
+           background-size: cover;">
+      <div class="full-bg-img">
+        <div class="mask flex-center" style="background-color: rgba(0, 0, 0, 0.3)">
+          <div class="page-header text-center fade-in-up">
+            <span class="h2" id="subtitle" title="Spring基于XML的依赖注入DI知识概述">
+              
+            </span>
+
+            
+              <div class="mt-3">
+  
+  
+    <span class="post-meta">
+      <i class="iconfont icon-date-fill" aria-hidden="true"></i>
+      <time datetime="2022-04-10 14:06" pubdate>
+        2022年4月10日 下午
+      </time>
+    </span>
+  
+</div>
+
+<div class="mt-1">
+  
+    <span class="post-meta mr-2">
+      <i class="iconfont icon-chart"></i>
+      7.4k 字
+    </span>
+  
+
+  
+    <span class="post-meta mr-2">
+      <i class="iconfont icon-clock-fill"></i>
+      
+      
+      62 分钟
+    </span>
+  
+
+  
+  
+</div>
+
+            
+          </div>
+
+          
+        </div>
+      </div>
+    </div>
+  </header>
+
+  <main>
+    
+      
+
+<div class="container-fluid nopadding-x">
+  <div class="row nomargin-x">
+    <div class="d-none d-lg-block col-lg-2"></div>
+    <div class="col-lg-8 nopadding-x-md">
+      <div class="container nopadding-x-md" id="board-ctn">
+        <div class="py-5" id="board">
+          <article class="post-content mx-auto">
+            <!-- SEO header -->
+            <h1 style="display: none">Spring基于XML的依赖注入DI知识概述</h1>
+            
+            <div class="markdown-body">
+              <h1 id="基于XML的DI"><a href="#基于XML的DI" class="headerlink" title="基于XML的DI"></a>基于XML的DI</h1><p>bean 实例在调用无参构造器创建对象后，就要对 bean 对象的属性进行初始化。初始化是由容器自动完成的，称为注入。根据注入方式的不同，常用的有两类：<strong>set 注入、构造注入</strong>。</p>
+<h2 id="一、set注入"><a href="#一、set注入" class="headerlink" title="一、set注入"></a>一、set注入</h2><p>set 注入也叫<strong>设值注入</strong>,通过 setter 方法传入被调用者的实例。</p>
+<h3 id="1-1-简单类型"><a href="#1-1-简单类型" class="headerlink" title="1.1.简单类型"></a>1.1.简单类型</h3><p>简单类型：spring中规定java的基本数据类型和String都是简单类型</p>
+<p>声明student对象：</p>
+<figure class="highlight typescript"><table><tr><td class="gutter"><div class="code-wrapper"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br></pre></div></td><td class="code"><pre><code class="hljs typescript">package com.<span class="hljs-property">xu</span>.<span class="hljs-property">ba01</span>;<br><br><span class="hljs-keyword">public</span> <span class="hljs-keyword">class</span> <span class="hljs-title class_">Student</span> &#123;<br>    <span class="hljs-keyword">private</span> <span class="hljs-title class_">String</span> name;<br>    <span class="hljs-keyword">private</span> int age;<br><br>    <span class="hljs-keyword">public</span> <span class="hljs-built_in">void</span> <span class="hljs-title function_">setName</span>(<span class="hljs-params"><span class="hljs-built_in">String</span> name</span>) &#123;<br>        <span class="hljs-variable language_">this</span>.<span class="hljs-property">name</span> = name;<br>    &#125;<br><br>    <span class="hljs-keyword">public</span> <span class="hljs-built_in">void</span> <span class="hljs-title function_">setAge</span>(<span class="hljs-params">int age</span>) &#123;<br>        <span class="hljs-variable language_">this</span>.<span class="hljs-property">age</span> = age;<br>    &#125;<br><br>    <span class="hljs-meta">@Override</span><br>    <span class="hljs-keyword">public</span> <span class="hljs-title class_">String</span> <span class="hljs-title function_">toString</span>(<span class="hljs-params"></span>) &#123;<br>        <span class="hljs-keyword">return</span> <span class="hljs-string">&quot;Student&#123;&quot;</span> +<br>                <span class="hljs-string">&quot;name=&#x27;&quot;</span> + name + <span class="hljs-string">&#x27;\&#x27;&#x27;</span> +<br>                <span class="hljs-string">&quot;, age=&quot;</span> + age +<br>                <span class="hljs-string">&#x27;&#125;&#x27;</span>;<br>    &#125;<br>&#125;<br></code></pre></td></tr></table></figure>
+<p>XML配置：</p>
+<figure class="highlight abnf"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><code class="hljs abnf">&lt;bean id<span class="hljs-operator">=</span><span class="hljs-string">&quot;myStudent&quot;</span> class<span class="hljs-operator">=</span><span class="hljs-string">&quot;com.xu.ba01.Student&quot;</span>&gt;<br>    &lt;property name<span class="hljs-operator">=</span><span class="hljs-string">&quot;name&quot;</span> value<span class="hljs-operator">=</span><span class="hljs-string">&quot;李四&quot;</span>/&gt;<br>    &lt;property name<span class="hljs-operator">=</span><span class="hljs-string">&quot;age&quot;</span> value<span class="hljs-operator">=</span><span class="hljs-string">&quot;20&quot;</span>/&gt;<br>&lt;/bean&gt;<br></code></pre></td></tr></table></figure>
+<p>测试代码：</p>
+<figure class="highlight arduino"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br></pre></td><td class="code"><pre><code class="hljs arduino">package com.xu;<br><br><span class="hljs-keyword">import</span> com.xu.ba01.Student;<br><span class="hljs-keyword">import</span> org.junit.Test;<br><span class="hljs-keyword">import</span> org.springframework.context.ApplicationContext;<br><span class="hljs-keyword">import</span> org.springframework.context.support.ClassPathXmlApplicationContext;<br><br><span class="hljs-keyword">public</span> <span class="hljs-keyword">class</span> <span class="hljs-title class_">mytest</span> &#123;<br><br>    @<span class="hljs-function">Test</span><br><span class="hljs-function">    <span class="hljs-keyword">public</span> <span class="hljs-type">void</span> <span class="hljs-title">test02</span><span class="hljs-params">()</span></span>&#123;<br><br>        <span class="hljs-type">String</span> config=<span class="hljs-string">&quot;ba01/applicationContext.xml&quot;</span>;<br>        ApplicationContext ac=<span class="hljs-keyword">new</span> <span class="hljs-built_in">ClassPathXmlApplicationContext</span>(config);<br>        Student student = (Student) ac.<span class="hljs-built_in">getBean</span>(<span class="hljs-string">&quot;myStudent&quot;</span>);<br>        System.out.<span class="hljs-built_in">println</span>(student);<br><br>    &#125;<br><br>&#125;<br></code></pre></td></tr></table></figure>
+<p>系统先找到相应的XML文件，打开XML文件后，系统按bean的id寻找使用的对象设值信息，寻找到相应的bean之后，系统找到property内中的name值，根据name值去找set方法，XML中的name值和对象set方法之间的匹配逻辑为name值要和set方法函数名去掉set后的单词首字母变小写后的单词相同，以上面的代码为例，XML中id为myStudent的对象有两个简单类型的属性赋值，分别是name和age，系统检测到name属性为name后，会在Student对象中搜寻名为setName的方法，并调用此set方法完成属性的赋值。</p>
+<h3 id="1-2引用类型"><a href="#1-2引用类型" class="headerlink" title="1.2引用类型"></a>1.2引用类型</h3><p>有很多时候，类中的成员变量会是一个引用类型。用人话讲就是这个类的某个成员变量不再单单是简单类型了，而是其他类定义的。比如下面代码示例中的student类，其成员变量school是school类型的，而school本身是一个类。<br>Student类和School类的定义如下：</p>
+<figure class="highlight typescript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br></pre></td><td class="code"><pre><code class="hljs typescript"><span class="hljs-comment">//School类的声明</span><br>package com.<span class="hljs-property">xu</span>.<span class="hljs-property">ba02</span>;<br><br><span class="hljs-keyword">public</span> <span class="hljs-keyword">class</span> <span class="hljs-title class_">School</span> &#123;<br>    <span class="hljs-keyword">private</span> <span class="hljs-title class_">String</span> name;<br>    <span class="hljs-keyword">private</span> <span class="hljs-title class_">String</span> address;<br><br>    <span class="hljs-keyword">public</span> <span class="hljs-built_in">void</span> <span class="hljs-title function_">setName</span>(<span class="hljs-params"><span class="hljs-built_in">String</span> name</span>) &#123;<br>        <span class="hljs-variable language_">this</span>.<span class="hljs-property">name</span> = name;<br>    &#125;<br><br>    <span class="hljs-keyword">public</span> <span class="hljs-built_in">void</span> <span class="hljs-title function_">setAddress</span>(<span class="hljs-params"><span class="hljs-built_in">String</span> address</span>) &#123;<br>        <span class="hljs-variable language_">this</span>.<span class="hljs-property">address</span> = address;<br>    &#125;<br><br>    <span class="hljs-meta">@Override</span><br>    <span class="hljs-keyword">public</span> <span class="hljs-title class_">String</span> <span class="hljs-title function_">toString</span>(<span class="hljs-params"></span>) &#123;<br>        <span class="hljs-keyword">return</span> <span class="hljs-string">&quot;School&#123;&quot;</span> +<br>                <span class="hljs-string">&quot;name=&#x27;&quot;</span> + name + <span class="hljs-string">&#x27;\&#x27;&#x27;</span> +<br>                <span class="hljs-string">&quot;, address=&#x27;&quot;</span> + address + <span class="hljs-string">&#x27;\&#x27;&#x27;</span> +<br>                <span class="hljs-string">&#x27;&#125;&#x27;</span>;<br>    &#125;<br>&#125;<br><br><br><span class="hljs-comment">//Student类的声明</span><br>package com.<span class="hljs-property">xu</span>.<span class="hljs-property">ba02</span>;<br><br><span class="hljs-keyword">public</span> <span class="hljs-keyword">class</span> <span class="hljs-title class_">Student</span> &#123;<br>    <span class="hljs-keyword">private</span> <span class="hljs-title class_">String</span> name;<br>    <span class="hljs-keyword">private</span> int age;<br>    <span class="hljs-comment">//声明一个引用类型</span><br>    <span class="hljs-keyword">private</span> <span class="hljs-title class_">School</span> school;<br><br>    <span class="hljs-keyword">public</span> <span class="hljs-built_in">void</span> <span class="hljs-title function_">setName</span>(<span class="hljs-params"><span class="hljs-built_in">String</span> name</span>) &#123;<br>        <span class="hljs-variable language_">this</span>.<span class="hljs-property">name</span> = name;<br>    &#125;<br><br>    <span class="hljs-keyword">public</span> <span class="hljs-built_in">void</span> <span class="hljs-title function_">setAge</span>(<span class="hljs-params">int age</span>) &#123;<br>        <span class="hljs-variable language_">this</span>.<span class="hljs-property">age</span> = age;<br>    &#125;<br><br>    <span class="hljs-keyword">public</span> <span class="hljs-built_in">void</span> <span class="hljs-title function_">setSchool</span>(<span class="hljs-params">School school</span>) &#123;<br>        <span class="hljs-title class_">System</span>.<span class="hljs-property">out</span>.<span class="hljs-title function_">println</span>(<span class="hljs-string">&quot;setSchool:&quot;</span>+school);<br>        <span class="hljs-variable language_">this</span>.<span class="hljs-property">school</span> = school;<br>    &#125;<br><br>    <span class="hljs-meta">@Override</span><br>    <span class="hljs-keyword">public</span> <span class="hljs-title class_">String</span> <span class="hljs-title function_">toString</span>(<span class="hljs-params"></span>) &#123;<br>        <span class="hljs-keyword">return</span> <span class="hljs-string">&quot;Student&#123;&quot;</span> +<br>                <span class="hljs-string">&quot;name=&#x27;&quot;</span> + name + <span class="hljs-string">&#x27;\&#x27;&#x27;</span> +<br>                <span class="hljs-string">&quot;, age=&quot;</span> + age +<br>                <span class="hljs-string">&quot;, school=&quot;</span> + school +<br>                <span class="hljs-string">&#x27;&#125;&#x27;</span>;<br>    &#125;<br>&#125;<br><br></code></pre></td></tr></table></figure>
+<p>当指定 bean 的某属性值为另一 bean 的实例时，通过 <strong>ref</strong> 指定它们间的引用关系。<strong>ref的值必须为某 bean 的 id 值</strong>。<br>其实逻辑很简单，既然有引用类型，那就不能直接用set赋值引用类型，应该先把引用类型这个对象单独声明，再通过某种方式把声明的引用类型引入进来。</p>
+<p>XML代码：</p>
+<figure class="highlight xml"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br></pre></td><td class="code"><pre><code class="hljs xml"><span class="hljs-comment">&lt;!-- </span><br><span class="hljs-comment">(2)引用类型的set注入：spring调用类的set方法</span><br><span class="hljs-comment">&lt;bean id=&quot;xxx&quot; class=&quot;xxx&quot;&gt;</span><br><span class="hljs-comment">    &lt;property name=&quot;属性名称&quot; ref=&quot;bean的id（对象的名称）&quot;</span><br><span class="hljs-comment">&lt;/bean&gt;</span><br><span class="hljs-comment">--&gt;</span><br><br><span class="hljs-tag">&lt;<span class="hljs-name">bean</span> <span class="hljs-attr">id</span>=<span class="hljs-string">&quot;myStudent&quot;</span> <span class="hljs-attr">class</span>=<span class="hljs-string">&quot;com.xu.ba02.Student&quot;</span>&gt;</span><br>    <span class="hljs-tag">&lt;<span class="hljs-name">property</span> <span class="hljs-attr">name</span>=<span class="hljs-string">&quot;name&quot;</span> <span class="hljs-attr">value</span>=<span class="hljs-string">&quot;李四&quot;</span>/&gt;</span><br>    <span class="hljs-tag">&lt;<span class="hljs-name">property</span> <span class="hljs-attr">name</span>=<span class="hljs-string">&quot;age&quot;</span> <span class="hljs-attr">value</span>=<span class="hljs-string">&quot;20&quot;</span>/&gt;</span><br>    <span class="hljs-comment">&lt;!-- 引用类型--&gt;</span><br>    <span class="hljs-tag">&lt;<span class="hljs-name">property</span> <span class="hljs-attr">name</span>=<span class="hljs-string">&quot;school&quot;</span> <span class="hljs-attr">ref</span>=<span class="hljs-string">&quot;mySchool&quot;</span>/&gt;</span><br><span class="hljs-tag">&lt;/<span class="hljs-name">bean</span>&gt;</span><br><span class="hljs-comment">&lt;!--    声明school对象--&gt;</span><br><span class="hljs-tag">&lt;<span class="hljs-name">bean</span> <span class="hljs-attr">id</span>=<span class="hljs-string">&quot;mySchool&quot;</span> <span class="hljs-attr">class</span>=<span class="hljs-string">&quot;com.xu.ba02.School&quot;</span>&gt;</span><br>    <span class="hljs-tag">&lt;<span class="hljs-name">property</span> <span class="hljs-attr">name</span>=<span class="hljs-string">&quot;name&quot;</span> <span class="hljs-attr">value</span>=<span class="hljs-string">&quot;黑大&quot;</span>/&gt;</span><br>    <span class="hljs-tag">&lt;<span class="hljs-name">property</span> <span class="hljs-attr">name</span>=<span class="hljs-string">&quot;address&quot;</span> <span class="hljs-attr">value</span>=<span class="hljs-string">&quot;学府路&quot;</span>/&gt;</span><br><span class="hljs-tag">&lt;/<span class="hljs-name">bean</span>&gt;</span><br></code></pre></td></tr></table></figure>
+<p>测试方法</p>
+<figure class="highlight arduino"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br></pre></td><td class="code"><pre><code class="hljs arduino">package com.xu;<br><span class="hljs-keyword">import</span> com.xu.ba02.Student;<br><span class="hljs-keyword">import</span> org.junit.Test;<br><span class="hljs-keyword">import</span> org.springframework.context.ApplicationContext;<br><span class="hljs-keyword">import</span> org.springframework.context.support.ClassPathXmlApplicationContext;<br><span class="hljs-keyword">public</span> <span class="hljs-keyword">class</span> <span class="hljs-title class_">mytest02</span> &#123;<br>    @<span class="hljs-function">Test</span><br><span class="hljs-function">    <span class="hljs-keyword">public</span> <span class="hljs-type">void</span> <span class="hljs-title">test02</span><span class="hljs-params">()</span></span>&#123;<br>        <span class="hljs-type">String</span> config=<span class="hljs-string">&quot;ba02/applicationContext.xml&quot;</span>;<br>        ApplicationContext ac=<span class="hljs-keyword">new</span> <span class="hljs-built_in">ClassPathXmlApplicationContext</span>(config);<br>        Student student = (Student) ac.<span class="hljs-built_in">getBean</span>(<span class="hljs-string">&quot;myStudent&quot;</span>);<br>        System.out.<span class="hljs-built_in">println</span>(student);<br>    &#125;<br>&#125;<br></code></pre></td></tr></table></figure>
+
+<h2 id="二、构造注入"><a href="#二、构造注入" class="headerlink" title="二、构造注入"></a>二、构造注入</h2><p><strong>构造注入</strong>是指，在构造调用者实例的同时，完成被调用者的实例化。即，使用构造器设置依赖关系。用人话讲就是在bean标签中调用这个类的构造方法对对象进行初始化。<br>代码示例：<br>Student类：增加了有参数的构造方法，用来初始化成员变量</p>
+<figure class="highlight typescript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br></pre></td><td class="code"><pre><code class="hljs typescript">package com.<span class="hljs-property">xu</span>.<span class="hljs-property">ba03</span>;<br><br><span class="hljs-keyword">import</span> javax.<span class="hljs-property">xml</span>.<span class="hljs-property">transform</span>.<span class="hljs-property">Source</span>;<br><br><span class="hljs-keyword">public</span> <span class="hljs-keyword">class</span> <span class="hljs-title class_">Student</span> &#123;<br>    <span class="hljs-keyword">private</span> <span class="hljs-title class_">String</span> name;<br>    <span class="hljs-keyword">private</span> int age;<br>    <span class="hljs-comment">//声明一个引用类型</span><br>    <span class="hljs-keyword">private</span> <span class="hljs-title class_">School</span> school;<br><br>    <span class="hljs-keyword">public</span> <span class="hljs-built_in">void</span> <span class="hljs-title function_">setName</span>(<span class="hljs-params"><span class="hljs-built_in">String</span> name</span>) &#123;<br>        <span class="hljs-variable language_">this</span>.<span class="hljs-property">name</span> = name;<br>    &#125;<br><br>    <span class="hljs-keyword">public</span> <span class="hljs-built_in">void</span> <span class="hljs-title function_">setAge</span>(<span class="hljs-params">int age</span>) &#123;<br>        <span class="hljs-variable language_">this</span>.<span class="hljs-property">age</span> = age;<br>    &#125;<br><br>    <span class="hljs-keyword">public</span> <span class="hljs-built_in">void</span> <span class="hljs-title function_">setSchool</span>(<span class="hljs-params">School school</span>) &#123;<br>        <span class="hljs-variable language_">this</span>.<span class="hljs-property">school</span> = school;<br>    &#125;<br>    <span class="hljs-keyword">public</span> <span class="hljs-title class_">Student</span>()&#123;<br>        <span class="hljs-title class_">System</span>.<span class="hljs-property">out</span>.<span class="hljs-title function_">println</span>(<span class="hljs-string">&quot;spring调用无参数构造方法创建对象。&quot;</span>);<br>    &#125;<br><br>    <span class="hljs-comment">/**</span><br><span class="hljs-comment">     * 创建有参数构造方法</span><br><span class="hljs-comment">     * <span class="hljs-doctag">@param</span> <span class="hljs-variable">myname</span></span><br><span class="hljs-comment">     * <span class="hljs-doctag">@param</span> <span class="hljs-variable">myage</span></span><br><span class="hljs-comment">     * <span class="hljs-doctag">@param</span> <span class="hljs-variable">myschool</span></span><br><span class="hljs-comment">     */</span><br>    <span class="hljs-keyword">public</span>  <span class="hljs-title class_">Student</span>(<span class="hljs-title class_">String</span> myname,int myage,<span class="hljs-title class_">School</span> myschool)&#123;<br>        <span class="hljs-title class_">System</span>.<span class="hljs-property">out</span>.<span class="hljs-title function_">println</span>(<span class="hljs-string">&quot;=========student有参数构造方法==========&quot;</span>);<br>        <span class="hljs-comment">//属性赋值</span><br>        <span class="hljs-variable language_">this</span>.<span class="hljs-property">name</span>=myname;<br>        <span class="hljs-variable language_">this</span>.<span class="hljs-property">age</span>=myage;<br>        <span class="hljs-variable language_">this</span>.<span class="hljs-property">school</span>=myschool;<br>    &#125;<br><br>    <span class="hljs-meta">@Override</span><br>    <span class="hljs-keyword">public</span> <span class="hljs-title class_">String</span> <span class="hljs-title function_">toString</span>(<span class="hljs-params"></span>) &#123;<br>        <span class="hljs-keyword">return</span> <span class="hljs-string">&quot;Student&#123;&quot;</span> +<br>                <span class="hljs-string">&quot;name=&#x27;&quot;</span> + name + <span class="hljs-string">&#x27;\&#x27;&#x27;</span> +<br>                <span class="hljs-string">&quot;, age=&quot;</span> + age +<br>                <span class="hljs-string">&quot;, school=&quot;</span> + school +<br>                <span class="hljs-string">&#x27;&#125;&#x27;</span>;<br>    &#125;<br>&#125;<br><br></code></pre></td></tr></table></figure>
+<p>School类和上一部分相同，这里省略不写。<br>重点是XML中的语法，实现了利用构造函数初始化成员变量。<br>XML代码内容：</p>
+<figure class="highlight xml"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br></pre></td><td class="code"><pre><code class="hljs xml">    2.构造注入：spring调用类有参数构造方法，在创建对象的同时，在构造方法中给属性赋值。<br>    构造注入使用<span class="hljs-tag">&lt;<span class="hljs-name">constructor-arg</span>&gt;</span>标签<br>    <span class="hljs-tag">&lt;<span class="hljs-name">constructor-arg</span>&gt;</span>标签：一个<span class="hljs-tag">&lt;<span class="hljs-name">constructor-arg</span>&gt;</span>表示构造方法一个参数<br>    <span class="hljs-tag">&lt;<span class="hljs-name">constractor-arg</span>&gt;</span>标签属性：<br>        name：表示构造方法的形参名<br>        index：表示构造方法参数的位置，参数从左往右位置是0,1,2的顺序,不过，该属性不要也行，但要注意，若参数类型相同，或之间有包含关系，则需要保证赋值顺序要与构造器中的参数顺序一致。<br>        value:构造方法的形参类型是简答类型的，使用value<br>        ref：构造方法的形参类型是引用类型的，使用ref<br>--&gt;<br><br><br>    <span class="hljs-tag">&lt;<span class="hljs-name">bean</span> <span class="hljs-attr">id</span>=<span class="hljs-string">&quot;myStudent&quot;</span> <span class="hljs-attr">class</span>=<span class="hljs-string">&quot;com.xu.ba03.Student&quot;</span>&gt;</span><br>        <span class="hljs-tag">&lt;<span class="hljs-name">constructor-arg</span> <span class="hljs-attr">name</span>=<span class="hljs-string">&quot;myname&quot;</span> <span class="hljs-attr">index</span>=<span class="hljs-string">&quot;0&quot;</span> <span class="hljs-attr">value</span>=<span class="hljs-string">&quot;李磊&quot;</span> /&gt;</span><br>        <span class="hljs-tag">&lt;<span class="hljs-name">constructor-arg</span> <span class="hljs-attr">name</span>=<span class="hljs-string">&quot;myage&quot;</span> <span class="hljs-attr">index</span>=<span class="hljs-string">&quot;1&quot;</span> <span class="hljs-attr">value</span>=<span class="hljs-string">&quot;20&quot;</span> /&gt;</span><br>        <span class="hljs-tag">&lt;<span class="hljs-name">constructor-arg</span> <span class="hljs-attr">name</span>=<span class="hljs-string">&quot;myschool&quot;</span> <span class="hljs-attr">index</span>=<span class="hljs-string">&quot;2&quot;</span> <span class="hljs-attr">ref</span>=<span class="hljs-string">&quot;mySchool&quot;</span> /&gt;</span><br>    <span class="hljs-tag">&lt;/<span class="hljs-name">bean</span>&gt;</span><br>    <span class="hljs-comment">&lt;!--    声明school对象--&gt;</span><br>    <span class="hljs-tag">&lt;<span class="hljs-name">bean</span> <span class="hljs-attr">id</span>=<span class="hljs-string">&quot;mySchool&quot;</span> <span class="hljs-attr">class</span>=<span class="hljs-string">&quot;com.xu.ba03.School&quot;</span>&gt;</span><br>        <span class="hljs-tag">&lt;<span class="hljs-name">property</span> <span class="hljs-attr">name</span>=<span class="hljs-string">&quot;name&quot;</span> <span class="hljs-attr">value</span>=<span class="hljs-string">&quot;黑大&quot;</span>/&gt;</span><br>        <span class="hljs-tag">&lt;<span class="hljs-name">property</span> <span class="hljs-attr">name</span>=<span class="hljs-string">&quot;address&quot;</span> <span class="hljs-attr">value</span>=<span class="hljs-string">&quot;学府路&quot;</span>/&gt;</span><br>    <span class="hljs-tag">&lt;/<span class="hljs-name">bean</span>&gt;</span><br></code></pre></td></tr></table></figure>
+<h2 id="三、引用类型属性自动注入"><a href="#三、引用类型属性自动注入" class="headerlink" title="三、引用类型属性自动注入"></a>三、引用类型属性自动注入</h2><p>对于引用类型属性的注入，也可不在配置文件中显示的注入。可以通过为<bean/>标签<br>设置 autowire 属性值，为引用类型属性进行隐式自动注入（默认是不自动注入引用类型属<br>性）。根据自动注入判断标准的不同，可以分为两种：  </p>
+<ol>
+<li>byName：根据名称自动注入  </li>
+<li>byType： 根据类型自动注入<h3 id="3-1-byName方式自动注入"><a href="#3-1-byName方式自动注入" class="headerlink" title="3.1. byName方式自动注入"></a>3.1. byName方式自动注入</h3>当配置文件中被调用者 bean 的 id 值与代码中调用者 bean 类的属性名相同时，可使用byName 方式，让容器自动将被调用者 bean 注入给调用者 bean。容器是通过调用者的 bean类的属性名与配置文件的被调用者 bean 的 id 进行比较而实现自动注入的。  <img src="/2022/04/10/Spring%E5%9F%BA%E4%BA%8EXML%E7%9A%84%E4%BE%9D%E8%B5%96%E6%B3%A8%E5%85%A5DI%E7%9F%A5%E8%AF%86%E6%A6%82%E8%BF%B0/1.png" srcset="/img/loading.gif" lazyload class="" title="This is an image">  
+可以看到，Student类中的引用类型成员变量School原先是在student的bean中使用ref进行引用的，现在是通过byName的方式自动引入。  <h3 id="3-2-byType方式自动注入"><a href="#3-2-byType方式自动注入" class="headerlink" title="3.2. byType方式自动注入"></a>3.2. byType方式自动注入</h3>使用 byType 方式自动注入，要求：配置文件中被调用者 bean 的 class 属性指定的类，要与代码中调用者 bean 类的某引用类型属性类型同源。即要么相同，要么有 is-a 关系（子类，或是实现类）。但这样的同源的被调用 bean 只能有一个。多于一个，容器就不知该匹配哪一个了。<br>举例：<img src="/2022/04/10/Spring%E5%9F%BA%E4%BA%8EXML%E7%9A%84%E4%BE%9D%E8%B5%96%E6%B3%A8%E5%85%A5DI%E7%9F%A5%E8%AF%86%E6%A6%82%E8%BF%B0/2.png" srcset="/img/loading.gif" lazyload class="" title="This is an image">   
+<h2 id="四、为应用指定多个Spring配置文件"><a href="#四、为应用指定多个Spring配置文件" class="headerlink" title="四、为应用指定多个Spring配置文件"></a>四、为应用指定多个Spring配置文件</h2>在实际应用里，随着应用规模的增加，系统中 Bean 数量也大量增加，导致配置文件变得非常庞大、臃肿。为了避免这种情况的产生，提高配置文件的可读性与可维护性，可以将Spring 配置文件分解成多个配置文件。</li>
+</ol>
+<p><strong>包含关系的配置文件：</strong><br>多个配置文件中有一个总文件，总配置文件将各其它子文件通过&lt;import&#x2F;&gt;引入。在 Java代码中只需要使用总配置文件对容器进行初始化即可。<br>图例：将容纳了各个对象声明的XML文件分解为三个单独文件，在total.xml中通过引用的方式引用其他文件内对对象的声明。  </p>
+<img src="/2022/04/10/Spring%E5%9F%BA%E4%BA%8EXML%E7%9A%84%E4%BE%9D%E8%B5%96%E6%B3%A8%E5%85%A5DI%E7%9F%A5%E8%AF%86%E6%A6%82%E8%BF%B0/3.png" srcset="/img/loading.gif" lazyload class="" title="This is an image">   
+
+<p>Spring配置文件total.xml:  </p>
+<figure class="highlight xml"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br></pre></td><td class="code"><pre><code class="hljs xml"><span class="hljs-comment">&lt;!--</span><br><span class="hljs-comment">    spring-total表示主配置文件，包含其他的配置文件的，主配置文件一般是不定义对象的</span><br><span class="hljs-comment">    语法：&lt;import resource =&quot;其他配置文件的路径&quot;&gt;</span><br><span class="hljs-comment">    关键字：“classpath：”表示类路径（class文件所在的目录）</span><br><span class="hljs-comment">        在spring配置文件中要指定其他文件的位置，需要使用classpath，告诉spring到哪里加载读取文件</span><br><span class="hljs-comment"></span><br><span class="hljs-comment">--&gt;</span><br><br><span class="hljs-comment">&lt;!--    加载的是文件列表--&gt;</span><br><span class="hljs-comment">&lt;!--    &lt;import resource=&quot;classpath:ba06/spring-school.xml&quot; /&gt;--&gt;</span><br><span class="hljs-comment">&lt;!--    &lt;import resource=&quot;classpath:ba06/spring-student.xml&quot; /&gt;--&gt;</span><br><span class="hljs-comment">&lt;!--    在包含关系的配置文件中，可以使用通配符（*表示任意字符）</span><br><span class="hljs-comment">        注意：住的配置文件名称不能包含在通配符的范围内</span><br><span class="hljs-comment">--&gt;</span><br>    <span class="hljs-tag">&lt;<span class="hljs-name">import</span> <span class="hljs-attr">resource</span>=<span class="hljs-string">&quot;classpath:ba06/spring-*.xml&quot;</span> /&gt;</span><br></code></pre></td></tr></table></figure>
+            </div>
+            <hr>
+            <div>
+              <div class="post-metas mb-3">
+                
+                  <div class="post-meta mr-3">
+                    <i class="iconfont icon-category"></i>
+                    
+                      <a class="hover-with-bg" href="/categories/Spring%E7%AC%94%E8%AE%B0/">Spring笔记</a>
+                    
+                  </div>
+                
+                
+                  <div class="post-meta">
+                    <i class="iconfont icon-tags"></i>
+                    
+                      <a class="hover-with-bg" href="/tags/%E6%8A%80%E6%9C%AF%E7%AC%94%E8%AE%B0/">技术笔记</a>
+                    
+                      <a class="hover-with-bg" href="/tags/Spring/">Spring</a>
+                    
+                  </div>
+                
+              </div>
+              
+                <p class="note note-warning">
+                  
+                    本博客所有文章除特别声明外，均采用 <a target="_blank" href="https://creativecommons.org/licenses/by-sa/4.0/deed.zh" rel="nofollow noopener noopener">CC BY-SA 4.0 协议</a> ，转载请注明出处！
+                  
+                </p>
+              
+              
+                <div class="post-prevnext">
+                  <article class="post-prev col-6">
+                    
+                    
+                  </article>
+                  <article class="post-next col-6">
+                    
+                    
+                      <a href="/2022/04/02/Spring%E6%A1%86%E6%9E%B6%E6%A6%82%E8%BF%B0/">
+                        <span class="hidden-mobile">Spring框架概述</span>
+                        <span class="visible-mobile">下一篇</span>
+                        <i class="iconfont icon-arrowright"></i>
+                      </a>
+                    
+                  </article>
+                </div>
+              
+            </div>
+
+            
+          </article>
+        </div>
+      </div>
+    </div>
+    
+      <div class="d-none d-lg-block col-lg-2 toc-container" id="toc-ctn">
+        <div id="toc">
+  <p class="toc-header"><i class="iconfont icon-list"></i>&nbsp;目录</p>
+  <div class="toc-body" id="toc-body"></div>
+</div>
+
+      </div>
+    
+  </div>
+</div>
+
+<!-- Custom -->
+
+
+    
+
+    
+      <a id="scroll-top-button" aria-label="TOP" href="#" role="button">
+        <i class="iconfont icon-arrowup" aria-hidden="true"></i>
+      </a>
+    
+
+    
+      <div class="modal fade" id="modalSearch" tabindex="-1" role="dialog" aria-labelledby="ModalLabel"
+     aria-hidden="true">
+  <div class="modal-dialog modal-dialog-scrollable modal-lg" role="document">
+    <div class="modal-content">
+      <div class="modal-header text-center">
+        <h4 class="modal-title w-100 font-weight-bold">搜索</h4>
+        <button type="button" id="local-search-close" class="close" data-dismiss="modal" aria-label="Close">
+          <span aria-hidden="true">&times;</span>
+        </button>
+      </div>
+      <div class="modal-body mx-3">
+        <div class="md-form mb-5">
+          <input type="text" id="local-search-input" class="form-control validate">
+          <label data-error="x" data-success="v"
+                 for="local-search-input">关键词</label>
+        </div>
+        <div class="list-group" id="local-search-result"></div>
+      </div>
+    </div>
+  </div>
+</div>
+    
+
+    
+  </main>
+
+  <footer class="text-center mt-5 py-3">
+  <div class="footer-content">
+     <a href="https://hexo.io" target="_blank" rel="nofollow noopener"><span>Hexo</span></a> <i class="iconfont icon-love"></i> <a href="https://github.com/fluid-dev/hexo-theme-fluid" target="_blank" rel="nofollow noopener"><span>Fluid</span></a> 
+  </div>
+  
+
+  
+
+  
+</footer>
+
+
+  <!-- SCRIPTS -->
+  
+  <script  src="https://cdn.jsdelivr.net/npm/nprogress@0/nprogress.min.js" ></script>
+  <link  rel="stylesheet" href="https://cdn.jsdelivr.net/npm/nprogress@0/nprogress.min.css" />
+
+  <script>
+    NProgress.configure({"showSpinner":false,"trickleSpeed":100})
+    NProgress.start()
+    window.addEventListener('load', function() {
+      NProgress.done();
+    })
+  </script>
+
+
+<script  src="https://cdn.jsdelivr.net/npm/jquery@3/dist/jquery.min.js" ></script>
+<script  src="https://cdn.jsdelivr.net/npm/bootstrap@4/dist/js/bootstrap.min.js" ></script>
+<script  src="/js/events.js" ></script>
+<script  src="/js/plugins.js" ></script>
+
+<!-- Plugins -->
+
+
+  <script  src="/js/local-search.js" ></script>
+
+
+
+  
+    <script  src="/js/img-lazyload.js" ></script>
+  
+
+
+
+  
+
+
+
+  
+    <script  src="https://cdn.jsdelivr.net/npm/tocbot@4/dist/tocbot.min.js" ></script>
+  
+  
+    <script  src="https://cdn.jsdelivr.net/npm/@fancyapps/fancybox@3/dist/jquery.fancybox.min.js" ></script>
+  
+  
+    <script  src="https://cdn.jsdelivr.net/npm/anchor-js@4/anchor.min.js" ></script>
+  
+  
+    <script defer src="https://cdn.jsdelivr.net/npm/clipboard@2/dist/clipboard.min.js" ></script>
+  
+
+
+
+
+
+
+  <script  src="https://cdn.jsdelivr.net/npm/typed.js@2/lib/typed.min.js" ></script>
+  <script>
+    (function (window, document) {
+      var typing = Fluid.plugins.typing;
+      var title = document.getElementById('subtitle').title;
+      
+        typing(title);
+      
+    })(window, document);
+  </script>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<!-- 主题的启动项 保持在最底部 -->
+<script  src="/js/boot.js" ></script>
+
+
+</body>
+</html>
